@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Payment Management System | Village Payment Tracker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-top: 40px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        color: #1a202c;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      .header p {
+        color: #718096;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: "Inter", sans-serif;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .phone-wrapper {
+        position: relative;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #a0aec0;
+        transition: color 0.2s;
+        background: white;
+        padding-left: 8px;
+      }
+
+      .toggle-password:hover {
+        color: #667eea;
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        margin-top: 10px;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      .amount-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px dashed #e2e8f0;
+        animation: slideDown 0.4s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .amount-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .message {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.success {
+        background: #c6f6d5;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+        display: block;
+      }
+
+      .message.error {
+        background: #fed7d7;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+        display: block;
+      }
+
+      .user-info {
+        background: #f7fafc;
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 20px;
+        display: none;
+      }
+
+      .user-info.show {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .user-info h4 {
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .user-detail {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .user-detail:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: #4a5568;
+      }
+
+      .detail-value {
+        color: #2d3748;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 0.6s linear infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 24px;
+        }
+
+        .header h1 {
+          font-size: 24px;
+        }
+
+        input {
+          font-size: 14px;
+        }
+      }
+     
+      
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="header">
+          <h1> Payment Management System</h1>
+          <p>Manage user payments seamlessly</p>
+        </div>
+
+        <form id="userForm">
+          <div class="form-group">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="name"
+                placeholder="Enter Name"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="phone-wrapper">
+              <input
+                type="password"
+                id="phone"
+                placeholder="Enter Phone Number"
+                maxlength="10"
+                autocomplete="off"
+              />
+              <i class="fas fa-eye toggle-password" id="togglePhone"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="village"
+                placeholder="Enter Village Name"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span id="btnText">Submit</span>
+          </button>
+          <button type="button" id="viewUsersBtn" class="btn-submit" class="user">
+            View All Users
+          </button>
+          <div id="users"></div>
+        </form>
+
+        <div id="amountSection" class="amount-section" style="display: none">
+          <label class="amount-label"> Enter Amount (₹)</label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="amount"
+              placeholder="Enter amount to add"
+              step="1"
+              min="1"
+            />
+          </div>
+          <button
+            class="btn-submit"
+            id="addAmountBtn"
+            style="
+              margin-top: 12px;
+              background: linear-gradient(135deg, #48bb78, #38a169);
+            "
+          >
+            Add Payment
+          </button>
+        </div>
+
+        <div id="message" class="message"></div>
+        <div id="userInfo" class="user-info"></div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = "http://localhost:5000/api/users";
+      let currentUser = null;
+
+      // DOM elements
+      const form = document.getElementById("userForm");
+      const nameInput = document.getElementById("name");
+      const phoneInput = document.getElementById("phone");
+      const villageInput = document.getElementById("village");
+      const submitBtn = document.getElementById("submitBtn");
+      const amountSection = document.getElementById("amountSection");
+      const amountInput = document.getElementById("amount");
+      const addAmountBtn = document.getElementById("addAmountBtn");
+      const messageDiv = document.getElementById("message");
+      const userInfoDiv = document.getElementById("userInfo");
+      const togglePhone = document.getElementById("togglePhone");
+
+      // Toggle phone number visibility
+      let isPhoneVisible = false;
+      togglePhone.addEventListener("click", () => {
+        isPhoneVisible = !isPhoneVisible;
+        phoneInput.type = isPhoneVisible ? "text" : "password";
+        togglePhone.classList.toggle("fa-eye-slash");
+        togglePhone.classList.toggle("fa-eye");
+      });
+
+      // Show message function
+      function showMessage(text, type) {
+        messageDiv.textContent = text;
+        messageDiv.className = `message ${type}`;
+        setTimeout(() => {
+          messageDiv.style.display = "none";
+          messageDiv.className = "message";
+        }, 5000);
+      }
+
+      // Show user info
+      function displayUserInfo(user) {
+        userInfoDiv.innerHTML = `
+        <h4>📋 User Details</h4>
+        <div class="user-detail">
+          <span class="detail-label">Name:</span>
+          <span class="detail-value">${user.name}</span>
+        </div>
+        <div class="user-detail">
+          <span class="detail-label">Phone:</span>
+          <span class="detail-value">${user.phone_number}</span>
+        </div>
+        <div class="user-detail">
+          <span class="detail-label">Village:</span>
+          <span class="detail-value">${user.village}</span>
+        </div>
+        <div class="user-detail">
+          <span class="detail-label">Total Amount:</span>
+          <span class="detail-value" style="color: #38a169; font-weight: 700;">₹${user.total_amount}</span>
+        </div>
+      `;
+        userInfoDiv.classList.add("show");
+      }
+
+      // Validate form fields
+      function validateForm(name, phone, village) {
+        if (!name || name.trim().length < 2) {
+          showMessage(
+            "Please enter a valid name (minimum 2 characters)",
+            "error",
+          );
+          return false;
+        }
+        if (!phone || !/^\d{10}$/.test(phone)) {
+          showMessage("Please enter a valid 10-digit phone number", "error");
+          return false;
+        }
+        if (!village || village.trim().length < 2) {
+          showMessage("Please enter a valid village name", "error");
+          return false;
+        }
+        return true;
+      }
+
+      // Check if user exists
+      async function checkUserExists(phoneNumber) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/check/${phoneNumber}`);
+          const data = await response.json();
+          console.log("Create User Response:", data);
+          return data;
+        } catch (error) {
+          console.error("Error checking user:", error);
+          showMessage("Network error. Please try again.", "error");
+          return null;
+        }
+      }
+
+      // Create new user
+      async function createUser(userData) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error("Error creating user:", error);
+          return { success: false, message: "Network error" };
+        }
+      }
+
+      // Add amount to existing user
+      async function addAmountToUser(phoneNumber, amount) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/add-amount`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              phone_number: phoneNumber,
+              amount: parseFloat(amount),
+            }),
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error("Error adding amount:", error);
+          return { success: false, message: "Network error" };
+        }
+      }
+
+      // Handle form submission
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = nameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const village = villageInput.value.trim();
+
+        if (!validateForm(name, phone, village)) {
+          return;
+        }
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Checking... <span class="loading"></span>';
+
+        // Check if user exists
+        const checkResult = await checkUserExists(phone);
+
+        if (!checkResult || !checkResult.success) {
+          showMessage("Error checking user status", "error");
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          return;
+        }
+
+        if (checkResult.exists) {
+          // User exists - show amount input section
+          currentUser = checkResult.user;
+          displayUserInfo(currentUser);
+          amountSection.style.display = "block";
+          showMessage(
+            `User ${currentUser.name} found! Please enter amount to add.`,
+            "success",
+          );
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        } else {
+          // Create new user
+          const createResult = await createUser({
+            name,
+            phone_number: phone,
+            village,
+          });
+
+          if (createResult.success) {
+            showMessage(`✅ ${createResult.message}`, "success");
+            currentUser = createResult.user;
+            displayUserInfo(currentUser);
+            // Reset form
+            nameInput.value = "";
+            phoneInput.value = "";
+            villageInput.value = "";
+            amountSection.style.display = "none";
+          } else {
+            showMessage(
+              `❌ ${createResult.message || "Error creating user"}`,
+              "error",
+            );
+          }
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      });
+
+      // Handle amount addition
+      addAmountBtn.addEventListener("click", async () => {
+        const amount = amountInput.value.trim();
+
+        if (!amount || amount <= 0 || isNaN(amount)) {
+          showMessage("Please enter a valid amount greater than 0", "error");
+          return;
+        }
+
+        if (!currentUser && phoneInput.value) {
+          // Try to get current user from phone
+          const phone = phoneInput.value.trim();
+          const checkResult = await checkUserExists(phone);
+          if (checkResult && checkResult.exists) {
+            currentUser = checkResult.user;
+          }
+        }
+
+        if (!currentUser) {
+          showMessage(
+            "User information not found. Please submit the form again.",
+            "error",
+          );
+          return;
+        }
+
+        addAmountBtn.disabled = true;
+        addAmountBtn.innerHTML = 'Processing... <span class="loading"></span>';
+
+        const result = await addAmountToUser(currentUser.phone_number, amount);
+
+        if (result.success) {
+          showMessage(`✅ ${result.message}`, "success");
+          // Update displayed user info
+          if (result.user) {
+            currentUser = result.user;
+            displayUserInfo(currentUser);
+          }
+          amountInput.value = "";
+          // Refresh user info
+          const refreshResult = await checkUserExists(currentUser.phone_number);
+          if (refreshResult && refreshResult.exists) {
+            currentUser = refreshResult.user;
+            displayUserInfo(currentUser);
+          }
+        } else {
+          showMessage(`❌ ${result.message || "Error adding amount"}`, "error");
+        }
+
+        addAmountBtn.disabled = false;
+        addAmountBtn.innerHTML = "Add Payment";
+      });
+
+      // Real-time phone number validation
+      phoneInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 10) value = value.slice(0, 10);
+        e.target.value = value;
+      });
+
+      // Auto-fetch user info when phone number loses focus
+      phoneInput.addEventListener("blur", async () => {
+        const phone = phoneInput.value.trim();
+        if (phone && /^\d{10}$/.test(phone)) {
+          const result = await checkUserExists(phone);
+          if (result && result.exists) {
+            currentUser = result.user;
+            displayUserInfo(currentUser);
+            if (nameInput.value === "") nameInput.value = currentUser.name;
+            if (villageInput.value === "")
+              villageInput.value = currentUser.village;
+          }
+        }
+      });
+      
+      document.getElementById("viewUsersBtn").addEventListener("click", () => {
+    window.location.href = "users.html";
+});
+    </script>
+  </body>
+</html>
